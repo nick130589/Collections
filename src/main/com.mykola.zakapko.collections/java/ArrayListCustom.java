@@ -15,12 +15,12 @@ public class ArrayListCustom<E> {
         array = (E[]) new Object[CAPACITY];
     }
 
-    public int size(){
+    public int size() {
         return size;
     }
 
-    public void add(int index, E value){
-        validateElementIndex(index);//:index > initialCapacity --> exception; index < 0
+    public void add(int index, E value) {
+        validateElementIndexForAdd(index);//:index > initialCapacity --> exception; index < 0
         ensureCapacity(size + 1);
 
         System.arraycopy(array, index, array, index + 1, size - index);
@@ -30,18 +30,21 @@ public class ArrayListCustom<E> {
     }
 
 
-    private void validateElementIndex(int index)
-    {
-        if (index > size || index < 0)
+    private void validateElementIndexForAdd(int index) {
+        if (index < 0 || index > this.size)
+            throw new IndexOutOfBoundsException(outOfBoundsMsg(index));
+    }
+
+    private void validateElementIndex(int index) {
+        if (index < 0 || index >= this.size)
             throw new IndexOutOfBoundsException(outOfBoundsMsg(index));
     }
 
     private String outOfBoundsMsg(int index) {
-        return "Index: "+index+", Size: "+size;
+        return "Index: " + index + ", Size: " + size;
     }
 
-    private void ensureCapacity(int minCapacity)
-    {
+    private void ensureCapacity(int minCapacity) {
         if (minCapacity - array.length > 0)
             grow(minCapacity);
     }
@@ -66,10 +69,80 @@ public class ArrayListCustom<E> {
                 MAX_ARRAY_SIZE;
     }
 
-    public boolean add(E e) {
+    public boolean add(E value) {
         ensureCapacity(size + 1);
-        array[size++] = e;
+        array[size++] = value;
         return true;
+    }
+
+
+    public int indexOf(E value) {
+        if (value == null) {
+            for (int i = 0; i < size; i++) {
+                if (array[i] == null)
+                    return i;
+            }
+        } else {
+            for (int i = 0; i < size; i++) {
+                if (value.equals(array[i]))
+                    return i;
+            }
+        }
+        return -1;
+    }
+
+    public int lastIndexOf(E value) {
+        if (value == null) {
+            for (int i = size - 1; i >= 0; i--) {
+                if (array[i] == null)
+                    return i;
+            }
+        } else {
+            for (int i = size - 1; i >= 0; i--) {
+                if (value.equals(array[i]))
+                    return i;
+            }
+        }
+        return -1;
+    }
+
+    public boolean contains(E value) {
+        for (int i = 0; i < size; i++) {
+            if (value.equals(array[i]))
+                return true;
+        }
+        return false;
+    }
+
+    public E set(int index, E value) {
+        validateElementIndex(index);
+        E oldValue = array[index];
+        array[index] = value;
+        return oldValue;
+    }
+
+    public void clear() {
+        for (int i = 0; i < size; i++)
+            array[i] = null;
+
+        size = 0;
+    }
+
+    public E get(int index) {
+        validateElementIndex(index);
+        return array[index];
+    }
+
+    public E remove(int index) {
+        validateElementIndex(index);
+        E oldValue = array[index];
+        int numMoved = size - index - 1;
+        if (numMoved > 0)
+            System.arraycopy(array, index+1, array, index,
+                    numMoved);
+        array[--size] = null; // clear to let GC do its work
+
+        return oldValue;
     }
 
 }
