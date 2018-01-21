@@ -14,21 +14,70 @@ public class LinkedListCustom<E> {
         return size;
     }
 
-    public void add(int index, E value){
+    public void add(int index, E value) {
         validateElementIndexForAdd(index);
-
-        Node<E> node = new Node<>(tail, value, null);
-        if(size == 0){
-            head = tail = node;
-        }else if(index == size){
-            tail.next = node;
-        node.prev = tail;
-        tail = node;
-    }
-        size++;
+        if (index == size) {
+            linkLast(value);
+        } else {
+            linkBefore(value, node(index));
+        }
         //linkFirst(value);
         //TODO: beginning
         //TODO: middle
+    }
+
+    void linkBefore(E value, Node<E> node) {
+        Node<E> pred = node.prev;
+        Node<E> newNode = new Node<>(pred, value, node);
+        node.prev = newNode;
+        if (pred == null)
+            head = newNode;
+        else
+            pred.next = newNode;
+        size++;
+
+    }
+    public void linkLast(E value) {
+        Node<E> node = new Node<>(tail, value, null);
+        if (size == 0) {
+            head = tail = node;
+        } else {
+            tail.next = node;
+            node.prev = tail;
+            tail = node;
+        }
+            size++;
+    }
+
+    Node<E> node(int index) {
+        // assert isElementIndex(index);
+
+        if (index < (size >> 1)) {
+            Node<E> x = head;
+            for (int i = 0; i < index; i++)
+                x = x.next;
+            return x;
+        } else {
+            Node<E> x = tail;
+            for (int i = size - 1; i > index; i--)
+                x = x.prev;
+            return x;
+        }
+    }
+
+    public void addFirst(E e) {
+        linkFirst(e);
+    }
+
+    private void linkFirst(E e) {
+        final Node<E> f = head;
+        final Node<E> newNode = new Node<>(null, e, f);
+        head = newNode;
+        if (f == null)
+            tail = newNode;
+        else
+            f.prev = newNode;
+        size++;
     }
 
     public E getFirst() {

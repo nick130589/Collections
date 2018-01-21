@@ -1,5 +1,3 @@
-import java.util.LinkedList;
-
 public class Main {
 
     public static void main(String[] args) {
@@ -47,12 +45,16 @@ public class Main {
 //        int value = linkedList.getFirst();
 //        linkedList.add(1, 3);
 //        linkedList.add(2, 4);
-        LinkedList<String> list = new LinkedList<>();
+        LinkedListCustom<String> list = new LinkedListCustom<>();
         list.add(0, "0");
         System.out.println(list);
         list.add(1, "1");
         System.out.println(list);
         list.add(2, "2");
+        System.out.println(list);
+        list.addFirst("6");
+        System.out.println(list);
+        list.add(1, "8");
         System.out.println(list);
     }
 
