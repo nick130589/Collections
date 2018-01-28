@@ -1,3 +1,5 @@
+import java.util.LinkedList;
+
 public class Main {
 
     public static void main(String[] args) {
@@ -35,10 +37,13 @@ public class Main {
 //        list2.add(4, 5);
 //        list2.add(5, 6);
 //
-//        LinkedList<Integer> linkedList2 = new LinkedList<Integer>();
-//        linkedList2.add(0, 2);
-//        linkedList2.add(1, 3);
-//        linkedList2.add(2, 4);
+        LinkedList<Integer> linkedList2 = new LinkedList<Integer>();
+        linkedList2.add(null);
+        linkedList2.indexOf(null);
+        linkedList2.add(0, 2);
+        linkedList2.indexOf(2);
+        linkedList2.add(1, 3);
+        linkedList2.add(2, 4);
 //
 //        LinkedListCustom <Integer> linkedList = new LinkedListCustom<Integer>();
 //        linkedList.add(0, 2);
