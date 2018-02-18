@@ -4,27 +4,26 @@ import java.util.StringJoiner;
 /**
  * Created by Nick on 1/14/2018.
  */
-public class LinkedListCustom<E> {
+public class LinkedListCustom<E> implements ListCustom {
 
     private Node<E> head;
     private Node<E> tail;
-    private int nextIndex;
     private int size;
 
-    public int size(){
+    public int size() {
         return size;
     }
 
-    public void add(int index, E value) {
+    public void add(int index, Object value) {
         validateElementIndexForAdd(index);
         if (index == size) {
-            linkLast(value);
+            linkLast((E) value);
         } else {
-            linkBefore(value, node(index));
+            linkBefore((E) value, node(index));
         }
     }
 
-    void linkBefore(E value, Node<E> node) {
+    private void linkBefore(E value, Node<E> node) {
         Node<E> pred = node.prev;
         Node<E> newNode = new Node<>(pred, value, node);
         node.prev = newNode;
@@ -35,7 +34,37 @@ public class LinkedListCustom<E> {
         size++;
 
     }
-    public void linkLast(E value) {
+
+    private E unlinkFirst(Node<E> f) {
+        final E element = f.value;
+        final Node<E> next = f.next;
+        f.value = null;
+        f.next = null; // help GC
+        head = next;
+        if (next == null)
+            tail = null;
+        else
+            next.prev = null;
+        size--;
+        return element;
+    }
+
+    private E unlinkLast(Node<E> l) {
+        // assert l == last && l != null;
+        final E element = l.value;
+        final Node<E> prev = l.prev;
+        l.value = null;
+        l.prev = null; // help GC
+        tail = prev;
+        if (prev == null)
+            head = null;
+        else
+            prev.next = null;
+        size--;
+        return element;
+    }
+
+    private void linkLast(E value) {
         Node<E> node = new Node<>(tail, value, null);
         if (size == 0) {
             head = tail = node;
@@ -44,10 +73,10 @@ public class LinkedListCustom<E> {
             node.prev = tail;
             tail = node;
         }
-            size++;
+        size++;
     }
 
-    Node<E> node(int index) {
+    private Node<E> node(int index) {
         // assert isElementIndex(index);
 
         if (index < (size >> 1)) {
@@ -85,8 +114,15 @@ public class LinkedListCustom<E> {
         return f.value;
     }
 
-    public boolean add(E e) {
-        linkLast(e);
+    public E getLast() {
+        final Node<E> l = tail;
+        if (l == null)
+            throw new NoSuchElementException();
+        return l.value;
+    }
+
+    public boolean add(Object e) {
+        linkLast((E) e);
         return true;
     }
 
@@ -144,11 +180,11 @@ public class LinkedListCustom<E> {
         return indexOf(o) != -1;
     }
 
-    public E set(int index, E element) {
+    public E set(int index, Object element) {
         validateElementIndex(index);
         Node<E> x = node(index);
         E oldVal = x.value;
-        x.value = element;
+        x.value = (E) element;
         return oldVal;
     }
 
@@ -162,6 +198,20 @@ public class LinkedListCustom<E> {
         }
         head = tail = null;
         size = 0;
+    }
+
+    public E removeFirst() {
+        final Node<E> f = head;
+        if (f == null)
+            throw new NoSuchElementException();
+        return unlinkFirst(f);
+    }
+
+    public E removeLast() {
+        final Node<E> l = tail;
+        if (l == null)
+            throw new NoSuchElementException();
+        return unlinkLast(l);
     }
 
 
@@ -201,7 +251,11 @@ public class LinkedListCustom<E> {
     }
 
 
-    private static class Node<E>{
+    public boolean isEmpty() {
+        return size == 0;
+    }
+
+    private static class Node<E> {
         E value;
         Node<E> next;
         Node<E> prev;

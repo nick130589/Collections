@@ -3,7 +3,7 @@ import java.util.Arrays;
 /**
  * Created by Nick on 1/14/2018.
  */
-public class ArrayListCustom<E> {
+public class ArrayListCustom<E> implements ListCustom {
 
     private static final int CAPACITY = 5;
     private static final int MAX_ARRAY_SIZE = Integer.MAX_VALUE - 8;
@@ -19,13 +19,13 @@ public class ArrayListCustom<E> {
         return size;
     }
 
-    public void add(int index, E value) {
+    public void add(int index, Object value) {
         validateElementIndexForAdd(index);//:index > initialCapacity --> exception; index < 0
         ensureCapacity(size + 1);
 
         System.arraycopy(array, index, array, index + 1, size - index);
 
-        array[index] = value;
+        array[index] = (E) value;
         size++;
     }
 
@@ -69,14 +69,13 @@ public class ArrayListCustom<E> {
                 MAX_ARRAY_SIZE;
     }
 
-    public boolean add(E value) {
+    public boolean add(Object value) {
         ensureCapacity(size + 1);
-        array[size++] = value;
+        array[size++] = (E) value;
         return true;
     }
 
-
-    public int indexOf(E value) {
+    public int indexOf(Object value) {
         if (value == null) {
             for (int i = 0; i < size; i++) {
                 if (array[i] == null)
@@ -91,7 +90,7 @@ public class ArrayListCustom<E> {
         return -1;
     }
 
-    public int lastIndexOf(E value) {
+    public int lastIndexOf(Object value) {
         if (value == null) {
             for (int i = size - 1; i >= 0; i--) {
                 if (array[i] == null)
@@ -106,7 +105,7 @@ public class ArrayListCustom<E> {
         return -1;
     }
 
-    public boolean contains(E value) {
+    public boolean contains(Object value) {
         for (int i = 0; i < size; i++) {
             if (value.equals(array[i]))
                 return true;
@@ -114,18 +113,24 @@ public class ArrayListCustom<E> {
         return false;
     }
 
-    public E set(int index, E value) {
+
+    public E set(int index, Object value) {
         validateElementIndex(index);
         E oldValue = array[index];
-        array[index] = value;
+        array[index] = (E) value;
         return oldValue;
     }
+
 
     public void clear() {
         for (int i = 0; i < size; i++)
             array[i] = null;
 
         size = 0;
+    }
+
+    public boolean isEmpty() {
+        return size == 0;
     }
 
     public E get(int index) {
@@ -138,11 +143,12 @@ public class ArrayListCustom<E> {
         E oldValue = array[index];
         int numMoved = size - index - 1;
         if (numMoved > 0)
-            System.arraycopy(array, index+1, array, index,
+            System.arraycopy(array, index + 1, array, index,
                     numMoved);
         array[--size] = null; // clear to let GC do its work
 
         return oldValue;
     }
+
 
 }

@@ -1,4 +1,6 @@
+import java.util.ArrayList;
 import java.util.LinkedList;
+import java.util.List;
 
 public class Main {
 
@@ -20,7 +22,9 @@ public class Main {
 //        list4.add(7);
 //        List<Integer> list2 = new ArrayList<Integer>();
 //
-//        ArrayList<Integer> list3 = new ArrayList<Integer>();
+        ArrayList<String> list3 = new ArrayList<>();
+        list3.add(0, "Test");
+       // list3.lastIndexOf(0, null);
 //        list3.add(0);
 //        list3.add(1);
 //        list3.add(2);
@@ -37,7 +41,7 @@ public class Main {
 //        list2.add(4, 5);
 //        list2.add(5, 6);
 //
-        LinkedList<Integer> linkedList2 = new LinkedList<Integer>();
+        List<Integer> linkedList2 = new LinkedList<Integer>();
         linkedList2.add(null);
         linkedList2.indexOf(null);
         linkedList2.add(0, 2);
